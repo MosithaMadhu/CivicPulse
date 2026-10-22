@@ -1,0 +1,22 @@
+title: "CivicPulse — City Infrastructure Triage with Strands Decider 2B"
+pitch: "A city infrastructure triage agent that classifies incident reports into priority levels using Strands Decider 2B, generates plain-language explanations, and requires human approval for any dispatch action."
+features:
+  - "validate and classify infrastructure incidents in real time"
+  - "deterministic safety threshold checks for sensor-equipped incident types"
+  - "Strands Decider 2B policy classification with calibrated confidence"
+  - "plain-language explanation and maintenance recommendation via Amazon Bedrock"
+  - "human approval required before any crew dispatch — never automatic"
+  - "deployed on Amazon Bedrock AgentCore Runtime"
+eager: false
+intro: "CivicPulse is a city infrastructure triage agent running on Amazon Bedrock. Strands Decider 2B classifies each incident against a written triage policy before any action is taken."
+intro_normal: "CivicPulse runs on Amazon Bedrock AgentCore Runtime. Strands Decider 2B checks every valid incident against the triage policy before any crew is dispatched."
+turns:
+  - say: '{"incident_id": "INC-A001", "incident_type": "blocked_drain", "location": "Victoria Road underpass", "reported_at": "2026-10-22T07:15:00Z", "description": "Drain completely blocked, water rising rapidly near pedestrian underpass. Emergency services on scene.", "sensor_readings": {"water_level_m": 0.92}, "synthetic_data": true}'
+    narrate: "Scenario A: a blocked drain with water level at 0.92 m, above the 0.9 m safety threshold. This data is synthetic. The safety override fires without calling the Decider — priority is immediate dispatch."
+  - say: '{"incident_id": "INC-B001", "incident_type": "bridge_vibration", "location": "Harbour Bridge east span", "reported_at": "2026-10-22T08:30:00Z", "description": "Unusual vibration reported by maintenance crew. No cracks visible. Sensor reading below alarm threshold.", "sensor_readings": {"vibration_mm_s": 4.2}, "synthetic_data": true}'
+    narrate: "Scenario B: bridge vibration at 4.2 mm/s, below the 5.0 mm/s threshold. This data is synthetic. No safety override — Strands Decider 2B classifies the incident and returns a confidence score."
+  - say: '{"incident_id": "INC-C001", "incident_type": "streetlight_failure", "location": "Park Street, lamp posts 12-17", "reported_at": "2026-10-22T21:00:00Z", "description": "Six consecutive streetlights out on Park Street. Pedestrians reporting difficulty walking safely at night.", "sensor_readings": {}, "synthetic_data": true}'
+    narrate: "Scenario C: a streetlight outage with no sensor data. This data is synthetic. The Decider classifies based on description and location alone — demonstrating that sensor data is optional."
+  - say: '{"incident_id": "INC-D001", "incident_type": "unknown_type", "location": "City centre", "reported_at": "2026-10-22T10:00:00Z", "description": "Something is broken.", "synthetic_data": true}'
+    narrate: "Scenario D: an invalid report with an unrecognised incident type. This data is synthetic. Validation fails immediately — priority is invalid and no Decider call is made."
+outro: "One forward pass per decision, typed answers with calibrated confidence, and Amazon Bedrock for the conversation. Built with the AWS User Group Madurai Strands Decider hackathon kit."

@@ -1,0 +1,15 @@
+# Amazon Bedrock AgentCore features for CivicPulse.
+# CivicPulse is a triage tool; it does not need cross-session memory or an external tool
+# gateway for the prototype. Both are disabled.
+
+memory:
+  enabled: false
+  name: agentmemory
+  strategies: [SEMANTIC, USER_PREFERENCE]
+  expiry_days: 30
+
+gateway:
+  enabled: false
+  name: tools
+  authorizer: AWS_IAM
+  targets: []
